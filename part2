@@ -1,0 +1,73 @@
+const employees = [
+  { employeeId: 11, name: 'John', managerId: 11 },
+  { employeeId: 50, name: 'Todd', managerId: 73 },
+  { employeeId: 150, name: 'Alex', managerId: 200 },
+  { employeeId: 73, name: 'Sara', managerId: 11 },
+  { employeeId: 200, name: 'Alex', managerId: 50 },
+  { employeeId: 100, name: 'Alex', managerId: 150 },
+];
+
+function findManagerHierarchy(employees, employeeId) {
+  const managerHierarchy = [];
+
+  const findManagers = (id) => {
+    const employee = employees.find(emp => emp.employeeId === id);
+    if (employee) {
+      managerHierarchy.push(employee.managerId);
+      if (employee.managerId !== employee.employeeId) {
+        findManagers(employee.managerId);
+      }
+    }
+  };
+
+  findManagers(employeeId);
+  return managerHierarchy;
+}
+
+const targetEmployeeId = 100;
+const managerHierarchy = findManagerHierarchy(employees, targetEmployeeId);
+console.log("Manager Hierarchy:", managerHierarchy);
+
+
+//ex 2
+const object = {
+  name: 'John Cohnor',
+  printName() {
+    console.log(this.name);
+  }
+}
+
+object.printName(); // 'John Cohnor'
+
+const printName = object.printName.bind(object); // Binding the object as context
+
+printName.call(object); // 'John Cohnor' fix it using call function
+
+//ex 3
+var hero = { 
+  _name: 'John Doe', 
+  getSecretIdentity: function (){ 
+    return this._name; 
+  }
+};
+
+var stoleSecretIdentity = hero.getSecretIdentity;
+console.log(stoleSecretIdentity.call(hero)); // 'John Doe' call() helps us borrow a function from one object
+console.log(hero.getSecretIdentity()); // 'John Doe'
+
+// ex 4
+(function () { 
+	try { 
+		throw new Error(); 
+	} catch (x) { 
+		var x = 1, y = 2; 
+		console.log(x); 
+	} 
+	
+	console.log(x); 
+	console.log(y);
+})(); //two vars' are considered fisrtly and x in catch block id not assigned a value, so we get: 1 undefined 2
+
+//ex 5
+console.log(1 < 2 < 3); // true bc js reads the code from left to right and assigns a boolean value for 1<2 = true (1), then true(1)<3 is true, so the final output will be true
+console.log(3 > 2 > 1); // same, but 3>2 = true which is 1 and 1 > 1 is not true, so we will get false (0)
